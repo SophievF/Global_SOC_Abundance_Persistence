@@ -10,12 +10,15 @@ library(ISRaD)
 library(tidyverse)
 library(ggpubr)
 
+## Access forked ISRaD repository from github and set local directory
+# Had to made some manual changes to some of the templates
 ISRaD_dir <- "C:/Users/sfromm/Documents/GitHub/ISRaD_SvF/ISRaD_data_files"
 
-#To compile ISRaD manually
+# Compile ISRaD manually
 ISRaD_comp <- compile(dataset_directory = ISRaD_dir, write_report = TRUE, 
                       write_out = TRUE, return = "list")
 
+# Access ISRaD geospatial extra data; too large to be stored on github
 geo_dir <- "D:/Seafile/ISRaD_geospatial_data/ISRaD_extra_geodata"
 ISRaD_extra <- ISRaD.extra(ISRaD_comp, geodata_directory = geo_dir)
 
@@ -24,15 +27,17 @@ ISRaD_key <- ISRaD.extra.geospatial.keys(ISRaD_extra,
 
 names(ISRaD_key)
 
-# To extract data from github
+## To extract original ISRaD data from github
 # ISRaD_extra <- ISRaD.getdata(directory = ISRaD_dir,
 #                              dataset = "full", extra = TRUE,
 #                              force_download = TRUE)
 
+# Save compiled dataset
 saveRDS(ISRaD_key, paste0(getwd(), "/Data/ISRaD_extra_", Sys.Date()))
 
 ISRaD_key <- readRDS("./Data/ISRaD_extra_2023-02-08")
 
+## Flatten and extract 'layer' data only from ISRaD database
 lyr_data_all <- ISRaD.flatten(ISRaD_key, 'layer')
 
 lyr_data_all %>% 
@@ -45,7 +50,8 @@ names(lyr_data_all)
 #   count(entry_name, pro_country, pro_land_cover, pro_usda_soil_order) %>% 
 #   view()
 
-#Prepare and filter data
+## Prepare and filter data
+# Remove peatlands, duplicates
 lyr_data <- lyr_data_all %>% 
   drop_na(lyr_14c) %>% 
   drop_na(lyr_c_org_filled) %>%  
@@ -106,7 +112,7 @@ lyr_data %>%
 lyr_data %>% 
   count(entry_name)
 
-#Check for data that has same depth value for same id
+# Check for data that has same depth value for same id
 lyr_data %>%
   dplyr::select(entry_name, id, lyr_name, depth, lyr_top, lyr_bot, lyr_14c, CORG) %>%
   group_by(id, depth) %>%
@@ -149,7 +155,7 @@ lyr_data_clean %>%
   geom_point(size = 3, shape = 21) +
   theme_bw(base_size = 16)
 
-# Gap-fill missing global data with reported local data (or vice-versa)
+## Gap-fill missing global data with reported local data (or vice-versa)
 lyr_data_clean %>% 
   skimr::skim_without_charts(pro_MAP, pro_MAT, pro_usda_soil_order,
                              lyr_clay_tot_psa, pro_KG_present_long)
@@ -234,6 +240,7 @@ summary(lyr_data_fill$pro_MAT_mod)
 
 ## Add Global GPP
 # Downloaded from Fluxcom and locally saved
+# Ended-up not using the GPP data for final analysis
 library(ncdf4)
 library(raster)
 library(sf)
@@ -288,7 +295,7 @@ lyr_data_fill_GPP_PET %>%
   filter(is.na(pro_PET_mm_yr)) %>% 
   count(entry_name)
 
-#Gap-fill missing PET values from other PET product (ISRaD_extra)
+# Gap-fill missing PET values from other PET product (ISRaD_extra)
 lyr_data_fill_GPP_PET$pro_PET_mm_yr <- as.numeric(lyr_data_fill_GPP_PET$pro_PET_mm_yr)
 lyr_data_fill_GPP_PET$pro_PET_mmyr <- as.numeric(lyr_data_fill_GPP_PET$pro_PET_mmyr)
 
