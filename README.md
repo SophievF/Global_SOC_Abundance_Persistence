@@ -27,4 +27,4 @@ Folder code:
 - ISRaD_SoilR_ModelProfiles: Script to perform the depth-resolved modeling with SoilR. Output files: Figures 6, S4 and S5
 - ISRaD_GlobalDataDistribution: Script to compare data distribution from ISRaD with global data distribution. Output file: Figure S1
 
-Additional information about the International Soil Radiocarbon Database can be found here: https://github.com/International-Soil-Radiocarbon-Database/ISRaD
+Additional information about the International Soil Radiocarbon Database can be found here: https://github.com/International-Soil-Radiocarbon-Database/ISRaD and https://soilradiocarbon.org/. 
