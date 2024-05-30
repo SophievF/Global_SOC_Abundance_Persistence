@@ -6,8 +6,10 @@ Author: Sophie von Fromm
 
 Finishing Date: May 2024
 
+Doi: 10.5281/zenodo.11105261
 
-This repository contains all the code to reproduce the analysis and all figures in the publication von Fromm et al. (2024), Global Change Biology.
+
+This repository contains all the code to reproduce the analysis and all figures in the publication von Fromm et al. (2024), Global Change Biology (https://doi.org/10.1111/gcb.17320).
 
 The folder 'Code' contains all the R code, the folder 'Data' contains all the data needed to run the R Scripts and the folder 'Figure' contains all the figures and tables that are produced with the R code.
 
